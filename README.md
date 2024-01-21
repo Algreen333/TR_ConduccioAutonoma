@@ -13,7 +13,8 @@ Aquest mòdul o sistema té la funció de detectar els carrils a partir de les i
 
 #### Preprocessat
 Partim de les imatges base:
-![lane_detection](https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1.jpg)
+
+![input image](https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1.jpg) ![input image](https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1.jpg)
 
 En primer lloc s'han de preprocessar les imatges, reduïnt així soroll i informació innecessària que pot interferir.
 
