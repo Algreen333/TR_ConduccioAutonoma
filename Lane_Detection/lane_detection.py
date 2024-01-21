@@ -162,8 +162,6 @@ while cap.isOpened():
          pass
       line_image = display_lines(lane_image, averaged_lines)
       combination = cv2.addWeighted(poly_image_a, 1, line_image, 1, 0)
-      #combination2 = cv2.addWeighted(combination, 1, center_image, 1, 0)
-      #center = center_line(lane_image, averaged_lines)
       combination2 = cv2.addWeighted(combination, 1, center_image, 0.5, 0)
       show = combination2
       cv2.imshow("Video", combination2)
