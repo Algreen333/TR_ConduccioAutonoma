@@ -24,6 +24,6 @@ El praràmetre `input_source` especifica la ruta del vídeo o l'ID/ruta de la c�
 Executant el codi s'obrirá una finestra on es mostrarà les deteccions que realitza el sistema:
 
 <p align="center">
-<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1_wCENTERS.jpg" width="48%"/> 
-<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG2_wCENTERS.jpg" width="48%"/> 
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1_wCENTERS.jpg" width="49.5%"/> 
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG2_wCENTERS.jpg" width="49.5%"/> 
 </p>
