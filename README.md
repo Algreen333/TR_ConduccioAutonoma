@@ -30,7 +30,7 @@ En primer lloc s'han de preprocessar les imatges, reduïnt així soroll i inform
 Per a detectar els carrils en aquestes imatges s'observa la intensitat dels pixels i els pics de intensitat ocasionats pels carrils poden ser detectats.
 
 <p align="center">
-<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/Figure3.jpg" width="48%"/> 
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/Figure_3.jpg" width="48%"/> 
 </p>
 
 
