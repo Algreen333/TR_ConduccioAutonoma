@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="conducció-autònoma-mitjançant-la-visió-per-computador-i-la-intel·ligència-artificial">Conducció Autònoma mitjançant la Visió per Computador i la Intel·ligència Artificial</h1>
+<p>Aquest repositori conté el codi desenvolupat per un Treball de Recerca juntament amb altres recursos.</p>
+<p>Les tres funcionalitats, essencials per a un sistema de conducció autònoma, que s’han desenvolupat són:</p>
+<ul>
+<li>Detecció i seguiment de carrils</li>
+<li>Detecció d’obstacles</li>
+<li>Pathfinding o navegació</li>
+</ul>
+<hr>
+<h2 id="detecció-i-seguiment-de-carrils">Detecció i seguiment de carrils</h2>
+<p>Aquest mòdul o sistema té la funció de detectar els carrils a partir de les imatges, després calcular-ne la posició i orentació relativa amb el vehicle i, finalment, estimar el gir que s’ha de realitzar per a mantenir el vehicle centrat.</p>
+<h4 id="processat-base">Processat base</h4>
+<p>El codi per a processar vídeos o imatges amb el sistema de detecció de carrils s’executa amb <code>Lane_Detection/lane_detection.py</code>. S’executa amb:<br>
+<code>python lane_detection.py --live_feed input_source</code></p>
+<p>Amb l’opció <code>--live_feed</code> es pot fer que el programa processi una càmera en temps real, si no es processarà un vídeo.<br>
+El praràmetre <code>input_source</code> especifica la ruta del vídeo o l’ID/ruta de la càmera.</p>
+<p>Executant el codi s’obrirá una finestra on es mostrarà les deteccions que realitza el sistema:</p>
+<p align="center">
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG1_wCENTERS.jpg" width="49.5%"> 
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/BNG2_wCENTERS.jpg" width="49.5%"> 
+</p>
+</div>
+</body>
+
+</html>

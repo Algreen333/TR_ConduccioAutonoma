@@ -1,38 +1,14 @@
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import math
-import threading
 import keyboard as k
-import os
-import random
-import string
+from tkinter import filedialog
 
-#Argparse
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("input",
-                    help="path of the input video or ID/url in case of live feed)")
-parser.add_argument("save_path", nargs="?",
-                    help="save path for screenshots (optional)")
-parser.add_argument("-f", "--frame_rate", type=int, default=30, nargs="?", action="store",
-                    help="frame rate, default is 30fps")
-parser.add_argument("--width", type=int, default=1280, nargs="?", action="store",
-                    help="live video capture width")
-parser.add_argument("--height", type=int, default=720, nargs="?", action="store",
-                    help="live video capture height")
-
-
-args = parser.parse_args()
-print(args)
+img = filedialog.askopenfilename()
 
 error = None
 slope_weight = 30
 dist_weight = 0.8
-
-#Imgs save path
-if args.save_path:
-   save_path = os.path.normpath(args.save_path)
 
 
 #Mask
@@ -130,52 +106,24 @@ def get_error(image, line):
       return slope_error + dist_error
    except:
       return 0
-
-characters = string.ascii_letters + string.digits
-
-cap = cv2.VideoCapture(args.input)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, args.width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
-
-while cap.isOpened():
-   _, frame = cap.read()
-   lane_image = np.copy(frame)
-   poly_image_a = poly_image(frame)
-   try:
-      canny_image = canny(gauss(gray(lane_image)))
-      cropped = area_of_interest(canny_image)
-      lines = cv2.HoughLinesP(cropped,2,np.pi/180,80,np.array([]),minLineLength=40,maxLineGap=5)
-      try:
-         averaged_lines = average_slope_intercept(lane_image, lines)
-         center = center_line(lane_image, averaged_lines)
-         center_image = display_lines(lane_image, [center], (0,200,255))
-         error = get_error(lane_image, center)
-      except:
-         pass
-      line_image = display_lines(lane_image, averaged_lines)
-      combination = cv2.addWeighted(poly_image_a, 1, line_image, 1, 0)
-      combination2 = cv2.addWeighted(combination, 1, center_image, 0.5, 0)
-      show = combination2
-      cv2.imshow("Video", combination2)
-      waitKey = cv2.waitKey(math.ceil(1000/args.frame_rate))
-      if waitKey == ord("q"):
-         break
-      elif waitKey == ord("t"):
-            if args.save_path:
-               im_name = "".join(random.choice(characters) for i in range(16))
-               im_path = os.path.join(save_path,f"{im_name}.jpg")
-               print(f"Saved image at {im_path}")
-               cv2.imwrite(im_path, show)
-   except:
-      try:
-         cv2.imshow("Video",poly_image_a)
-         if cv2.waitKey(math.ceil(1000/args.frame_rate)) == ord("q"):
-          break
-      except:
-         cv2.imshow("Video",lane_image)
-         if cv2.waitKey(math.ceil(1000/args.frame_rate)) == ord("q"):
-            break
    
-      
-cap.release()
-cv2.destroyAllWindows()
+frame = cv2.imread(img)
+#print(frame)
+
+poly_img = poly_image(frame)
+
+canny_image = canny(gauss(gray(frame)))
+cropped = area_of_interest(canny_image)
+lines = cv2.HoughLinesP(cropped,2,np.pi/180,80,np.array([]),minLineLength=40,maxLineGap=5)
+averaged_lines = average_slope_intercept(frame, lines)
+center = center_line(frame, averaged_lines)
+center_image = display_lines(frame, [center], (0,200,255))
+error = get_error(frame, center)
+line_image = display_lines(frame, averaged_lines)
+combination = cv2.addWeighted(poly_img, 1, line_image, 1, 0)
+combination2 = cv2.addWeighted(combination, 1, center_image, 0.5, 0)
+
+cv2.imshow("result", combination2)
+if cv2.waitKey(0) == ord("s"):
+   f = filedialog.asksaveasfile(mode='w', defaultextension=".jpg", filetypes=[("All files", "*.*"), ("Image files", (".png", ".jpg", ".jpeg"))] )
+   if f: cv2.imwrite(f.name, combination2)

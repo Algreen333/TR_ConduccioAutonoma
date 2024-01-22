@@ -11,28 +11,29 @@ import string
 #Argparse
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("input",
-                    help="path of the input video or ID/url in case of live feed)")
+parser.parse_args()
+parser.add_argument("--live_feed", action="store_true",
+                    help="get live feed input source")
+parser.add_argument("path",
+                    help="path of the input (ID or url in case of live feed)")
 parser.add_argument("save_path", nargs="?",
                     help="save path for screenshots (optional)")
-parser.add_argument("-f", "--frame_rate", type=int, default=30, nargs="?", action="store",
-                    help="frame rate, default is 30fps")
-parser.add_argument("--width", type=int, default=1280, nargs="?", action="store",
-                    help="live video capture width")
-parser.add_argument("--height", type=int, default=720, nargs="?", action="store",
-                    help="live video capture height")
 
-
-args = parser.parse_args()
-print(args)
 
 error = None
 slope_weight = 30
 dist_weight = 0.8
 
+#Socket client
+import zmq
+
+context = zmq.Context()
+socket = context.socket(zmq.REQ)
+socket.connect("tcp://localhost:5545")
+
+
 #Imgs save path
-if args.save_path:
-   save_path = os.path.normpath(args.save_path)
+save_path = r"D:\TR_AutonomousDriving\Material\results"
 
 
 #Mask
@@ -130,12 +131,23 @@ def get_error(image, line):
       return slope_error + dist_error
    except:
       return 0
+   
+#BeamNG control system
+def send_data(error):
+   if error != None:
+      msg = str(["lane_detection",error])
+      try:
+         socket.send_string(str(msg))
+         socket.recv()
+      except:
+         pass
 
 characters = string.ascii_letters + string.digits
 
-cap = cv2.VideoCapture(args.input)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, args.width)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
+
+cap = cv2.VideoCapture(2)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 while cap.isOpened():
    _, frame = cap.read()
@@ -157,25 +169,26 @@ while cap.isOpened():
       combination2 = cv2.addWeighted(combination, 1, center_image, 0.5, 0)
       show = combination2
       cv2.imshow("Video", combination2)
-      waitKey = cv2.waitKey(math.ceil(1000/args.frame_rate))
+      waitKey = cv2.waitKey(20)
       if waitKey == ord("q"):
          break
       elif waitKey == ord("t"):
-            if args.save_path:
-               im_name = "".join(random.choice(characters) for i in range(16))
-               im_path = os.path.join(save_path,f"{im_name}.jpg")
-               print(f"Saved image at {im_path}")
-               cv2.imwrite(im_path, show)
+            im_name = "".join(random.choice(characters) for i in range(16))
+            im_path = os.path.join(save_path,f"{im_name}.jpg")
+            print(f"Saved image at {im_path}")
+            cv2.imwrite(im_path, show)
    except:
       try:
          cv2.imshow("Video",poly_image_a)
-         if cv2.waitKey(math.ceil(1000/args.frame_rate)) == ord("q"):
+         if cv2.waitKey(20) == ord("q"):
           break
       except:
          cv2.imshow("Video",lane_image)
-         if cv2.waitKey(math.ceil(1000/args.frame_rate)) == ord("q"):
+         if cv2.waitKey(20) == ord("q"):
             break
    
       
+      
 cap.release()
 cv2.destroyAllWindows()
+
