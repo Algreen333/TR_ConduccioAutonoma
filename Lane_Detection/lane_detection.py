@@ -12,7 +12,7 @@ import string
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("input",
-                    help="path of the input video or ID/url in case of live feed)")
+                    help="path of the input video or ID/url in case of live feed")
 parser.add_argument("save_path", nargs="?",
                     help="save path for screenshots (optional)")
 parser.add_argument("-f", "--frame_rate", type=int, default=30, nargs="?", action="store",
@@ -21,10 +21,13 @@ parser.add_argument("--width", type=int, default=1280, nargs="?", action="store"
                     help="live video capture width")
 parser.add_argument("--height", type=int, default=720, nargs="?", action="store",
                     help="live video capture height")
-
+parser.add_argument("--beamng", action="store_true",
+                    help="enable socket server for beamng implementation")
+parser.add_argument("--port", type=int, default=5545, nargs="?", action="store",
+                    help="set port of zmq server for beamng implementation (default is 5545)")
 
 args = parser.parse_args()
-print(args)
+#print(args)
 
 error = None
 slope_weight = 30
@@ -34,6 +37,23 @@ dist_weight = 0.8
 if args.save_path:
    save_path = os.path.normpath(args.save_path)
 
+if args.beamng:
+   #Socket server
+   import zmq
+
+   context = zmq.Context()
+   socket = context.socket(zmq.REQ)
+   socket.connect(f"tcp://localhost:{parser.port}")
+
+#BeamNG control system
+def send_data(error):
+   if error != None and args.beamng:
+      msg = str(["lane_detection",error])
+      try:
+         socket.send_string(str(msg))
+         socket.recv()
+      except:
+         pass
 
 #Mask
 def poly_image(image):
@@ -150,6 +170,7 @@ while cap.isOpened():
          center = center_line(lane_image, averaged_lines)
          center_image = display_lines(lane_image, [center], (0,200,255))
          error = get_error(lane_image, center)
+         threading.Thread(target=send_data, args=(error,)).start()
       except:
          pass
       line_image = display_lines(lane_image, averaged_lines)
