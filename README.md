@@ -61,4 +61,8 @@ L'altre programa és el que es comunicarà amb el joc per a girar el vehicle. Ho
 `python control_system_beamng.py [port]`
 El port, per defecte 5455, també pot ser modificat; aquest ha de concordar amb el port per al programa de detecció de carrils.
 
-Un cop executats els dos programes en paral·lel el sistema pot ser activat/desactivat prement la tecla `l`
+Un cop executats els dos programes en paral·lel el sistema pot ser activat/desactivat prement la tecla `l` i el vehicle començarà a realitzar el gir de forma autònoma. El cotxe s'haurà d'accelerar de forma manual o programant el control de creuer del mateix joc.
+
+<p align="center">
+<img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/gif.gif" width="49.5%"/> 
+</p>
