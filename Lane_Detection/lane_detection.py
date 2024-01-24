@@ -1,9 +1,7 @@
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import math
 import threading
-import keyboard as k
 import os
 import random
 import string
@@ -25,13 +23,15 @@ parser.add_argument("--beamng", action="store_true",
                     help="enable socket server for beamng implementation")
 parser.add_argument("--port", type=int, default=5545, nargs="?", action="store",
                     help="set port of zmq server for beamng implementation (default is 5545)")
-
 args = parser.parse_args()
-#print(args)
 
-error = None
+
+###PARAMETERS
 slope_weight = 30
 dist_weight = 0.8
+
+
+error = None
 
 #Imgs save path
 if args.save_path:
@@ -58,6 +58,7 @@ def send_data(error):
 #Mask
 def poly_image(image):
    h,w = image.shape[:2]
+   ### POLYGON
    poly = np.array([[(0,h-math.floor(h*0.1)),(0, h), (w, h), (w,h-math.floor(h*0.1)),(math.floor(w/2+(w*0.08)), math.floor(h*0.55)), (math.floor(w/2-(w*0.08)), math.floor(h*0.55))]])
    copy = image.copy()
    cv2.fillPoly(copy, poly, color=(0, 255, 0))

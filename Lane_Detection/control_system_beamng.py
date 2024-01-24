@@ -6,7 +6,6 @@ import ast
 import numpy
 import math
 import keyboard as k
-import threading
 
 def simple_steering(error):
     error = max(min(error, max_err), min_err)

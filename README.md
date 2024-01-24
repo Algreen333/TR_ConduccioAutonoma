@@ -54,7 +54,7 @@ També seria necessari ocultar elements de la *HUD* o qualsevol element dins del
 #### Execució
 Per a la implementació al BeamNG hi ha dos programes que funcionen en paral·lel. 
 
-El primer és el del processat d'imatge. S'executa amb el mateix fitxer que per al processat de vídeos o en temps real, però requereix el paràmetre `--beamng` i posar com a input l'ID de la càmera virtual del OBS:
+El primer és el del processat d'imatge. S'executa amb el mateix fitxer que per al processat de vídeos o en temps real, però requereix el paràmetre `--beamng` i posar com a input l'ID de la càmera virtual de l'OBS:
 `python lane_detection.py 0 --beamng`
 
 L'altre programa és el que es comunicarà amb el joc per a girar el vehicle. Ho realitza emulant un controlador de videojoc:
@@ -66,3 +66,14 @@ Un cop executats els dos programes en paral·lel el sistema pot ser activat/desa
 <p align="center">
 <img src="https://github.com/Algreen333/TR_ConduccioAutonoma/blob/main/Recursos/imgs/LaneDetection/gif.gif" width="49.5%"/> 
 </p>
+
+#### Adaptació i reajustament
+En circumstàncies o entorns diferents cal fer una adaptació del sistema, modificant diversos paràmetres dins dels arxius de codi.
+
+**lane_detection.py**:
+ - `slope_weight`: Pes de la diferència de la inclinació del centre del carril vs. l'orientació del vehicle en la funció del càlcul de l'error.
+ - `dist_weight`: Pes del desplaçament del centre del carril vs. el centre del vehicle en la funció de càlcul de l'error.
+- `poly`: Màscara de filtrat. La secció de color verd en les visualitzacions. És l'àrea que "observa" el sistema de detecció de carrils. Per a ajustar-lo s'han de modificar els valors dins de la funció.
+
+**control_system_beamng.py**:
+Dins del sistema de control per a la implementació al BeamNG, els paràmetres que es poden ajustar són els del `PID` i limitadors del valor de sortida.
