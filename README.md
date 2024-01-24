@@ -76,4 +76,5 @@ En circumstàncies o entorns diferents cal fer una adaptació del sistema, modif
 - `poly`: Màscara de filtrat. La secció de color verd en les visualitzacions. És l'àrea que "observa" el sistema de detecció de carrils. Per a ajustar-lo s'han de modificar els valors dins de la funció.
 
 **control_system_beamng.py**:
+
 Dins del sistema de control per a la implementació al BeamNG, els paràmetres que es poden ajustar són els del `PID` i limitadors del valor de sortida.
