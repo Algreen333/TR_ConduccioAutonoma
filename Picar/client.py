@@ -6,9 +6,11 @@ import time as t
 #Argparse
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("url", type=str, default="192.168.1.53:5505", nargs="?", action="store",
-                    help="Server port. Default is '192.168.1.53:5505'")
+parser.add_argument("url", type=str, default="192.168.1.53:8000", nargs="?", action="store",
+                    help="Server port. Default is '192.168.1.53:8000'")
 args = parser.parse_args()
+print(args.url)
+
 
 # Pins and Raspi stuff
 st_PIN = 4
@@ -24,6 +26,8 @@ threshold = 0.1
 
 # Socket stuff
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = "192.168.1.53" # servers ip4 address
+port = 5000
 url = args.url
 url = url.split(":")
 host = url[0]
@@ -53,29 +57,28 @@ def picar_control(status, axis={}, buttons={}):
 
 # Main loop
 while True:
-    try:
-        start_time = t.time()
-        message = "test".encode()
-        clientsocket.send(message)
-        response = clientsocket.recv(1024)
-        msg = response.decode()
-        if msg != "500":
-            axis_data, button_data = msg.split("; ")
-            axis = ast.literal_eval(axis_data)
-            buttons = ast.literal_eval(button_data)
-            end_time = t.time()
-            controls = picar_control(True, axis, buttons)
-            steer.value = controls[2]*steer_mult
-            if controls[0]>threshold:
-                m1.forward(controls[0]*speed_mult)
-                m2.forward(controls[0]*speed_mult)
-            elif controls[1]>threshold:
-                m1.backward(controls[1]*speed_mult)
-                m2.backward(controls[1]*speed_mult)
-            else:
-                m1.stop()
-                m2.stop()
-            print(f"{controls};   Elapsed time: {end_time - start_time}")
-        else: print(msg)
-    finally:
-        clientsocket.close()
+    start_time = t.time()
+    message = "test".encode()
+    clientsocket.send(b'test')
+    response = clientsocket.recv(1024)
+    msg = response.decode()
+    if msg != "500":
+        axis_data, button_data = msg.split("; ")
+        axis = ast.literal_eval(axis_data)
+        buttons = ast.literal_eval(button_data)
+        end_time = t.time()
+        controls = picar_control(True, axis, buttons)
+        steer.value = controls[2]*steer_mult
+        if controls[0]>threshold:
+            m1.forward(controls[0]*speed_mult)
+            m2.forward(controls[0]*speed_mult)
+        elif controls[1]>threshold:
+            m1.backward(controls[1]*speed_mult)
+            m2.backward(controls[1]*speed_mult)
+        else:
+            m1.stop()
+            m2.stop()
+        print(f"{controls};   Elapsed time: {end_time - start_time}")
+    else: print(msg)
+
+clientsocket.close()

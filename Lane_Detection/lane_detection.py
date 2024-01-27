@@ -9,7 +9,7 @@ import string
 #Argparse
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("input",
+parser.add_argument("input", action="store",
                     help="path of the input video or ID/url in case of live feed")
 parser.add_argument("save_path", nargs="?",
                     help="save path for screenshots (optional)")
@@ -43,7 +43,7 @@ if args.beamng:
 
    context = zmq.Context()
    socket = context.socket(zmq.REQ)
-   socket.connect(f"tcp://localhost:{parser.port}")
+   socket.connect(f"tcp://localhost:{args.port}")
 
 #BeamNG control system
 def send_data(error):
@@ -154,9 +154,15 @@ def get_error(image, line):
 
 characters = string.ascii_letters + string.digits
 
-cap = cv2.VideoCapture(args.input)
+if len(args.input) == 1:
+   cap = cv2.VideoCapture(int(args.input))
+else:
+   cap = cv2.VideoCapture(args.input)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, args.width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
+
+print(args)
+print(cap.isOpened())
 
 while cap.isOpened():
    _, frame = cap.read()
